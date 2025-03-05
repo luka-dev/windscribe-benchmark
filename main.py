@@ -58,6 +58,7 @@ def speed_test():
     data = list(csv_reader)
 
     if len(data) > 0:
+        print(data[0])
         return data[0]
 
     return None
