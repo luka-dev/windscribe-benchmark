@@ -9,9 +9,11 @@ def ws_disconnect():
     os.system("windscribe-cli disconnect")
 
 def ws_connect(server):
-    result = subprocess.run(["windscribe-cli", "connect", server, "Wireguard"])
-    exit_code = result.returncode
-    return exit_code == 0
+    try:
+        result = subprocess.run(["windscribe-cli", "connect", server, "Wireguard"], timeout=60)
+        return result.returncode == 0
+    except:
+        return False
 
 
 def ws_servers():
@@ -58,7 +60,7 @@ def speed_test():
     data = list(csv_reader)
 
     if len(data) > 0:
-        print(data[0])
+        print(int(data[0]['download']) / 1024 / 1024)
         return data[0]
 
     return None
@@ -70,7 +72,7 @@ def main():
 
     speeds = []
     for host in hosts:
-        print(host)
+        # print(host)
         if ws_connect(host):
             speeds.append(speed_test())
             ws_disconnect()
